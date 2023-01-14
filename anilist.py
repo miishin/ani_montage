@@ -21,7 +21,21 @@ def get_user(username):
                         }}}}}}
     '''
     result = requests.post(ANILIST_URL, json={'query': query, 'variables': variables}).json()
-    return clean_response(result)
+    return result
+
+def get_all_anime(username):
+    variables = {'name': username}
+    query = '''
+    query ($name : String) {
+          User(name: $name) {
+            statistics {
+                anime {
+                    scores(limit: 10, sort: MEAN_SCORE_DESC){
+                        score,
+                        mediaIds}}}}}
+    '''
+    result = requests.post(ANILIST_URL, json={'query': query, 'variables': variables}).json()
+    return result
 
 def clean_response(res):
     if "errors" in res:
@@ -32,5 +46,5 @@ def clean_response(res):
         titles[i] = re.sub(r'\W+', '', title["title"]["romaji"].replace(' ', '_'))
     return titles
 
-print(get_user("miishin"))
+
 

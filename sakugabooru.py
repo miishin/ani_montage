@@ -10,6 +10,12 @@ def sakuget(num_posts, tag):
     r = requests.get('https://www.sakugabooru.com/post.json', params=p)
     return r.json()
 
+# sorts the json response
+def sort_posts(posts):
+    return sorted(posts, key=lambda p: p['score'], reverse=True)
+
+
+sort_posts(sakuget(1, "One_Piece"))
 # grabs the links to the mp4
 def get_mp4_links(r_json):
     links = []

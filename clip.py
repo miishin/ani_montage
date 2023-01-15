@@ -10,5 +10,4 @@ def get_popular_clips(usr):
             mp4s.append(mp4link)
     return mp4s
 
-#print(get_popular_clips(argv[1]))
-print(get_popular_clips("miishin"))
+print(get_popular_clips(argv[1]))

@@ -1,4 +1,5 @@
 import anilist, sakugabooru
+import requests
 from sys import argv
 
 def get_popular_clips(usr):
@@ -10,4 +11,11 @@ def get_popular_clips(usr):
             mp4s.append(mp4link)
     return mp4s
 
-print(get_popular_clips(argv[1]))
+def download_clips(links):
+    for link in links:
+        response = requests.get(link[1])
+        with open(f"./clips/{link[0]}.mp4", "wb") as f:
+            f.write(response.content)
+
+x = get_popular_clips(argv[1])
+download_clips(x)

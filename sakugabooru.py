@@ -24,12 +24,15 @@ def get_mp4_links(r_json):
 def get_most_popular(r_json):
     if not r_json:
         return None
-    return max(r_json, key=lambda j: j['score']) 
-    
+    return max(filter_long_clips(r_json), key=lambda j: j['score']) 
+
+def filter_long_clips(r_json):
+    if not r_json:
+        return None
+    return filter(lambda j: j['file_size'] < 10000000, r_json)
+
 def sakuget_popular_mp4_link(num_posts : int, search_tag : string):
     clip = get_most_popular(sakuget(num_posts, search_tag))
     if clip:
         return (search_tag, clip['file_url'])
     return None
-
-    

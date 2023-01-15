@@ -1,8 +1,7 @@
 import requests, re
 
 ANILIST_URL = 'https://graphql.anilist.co'
-
-# Sakugabooru likes: ! - ; 
+ 
 CHARS_TO_REPLACE = r'[^a-zA-Z0-9:;.!_]'
 CHARS_TO_REPLACE_WITH_UNDERSCORE = r'_?[^a-zA-Z0-9:;.!_]_?'
 
@@ -13,7 +12,7 @@ def get_user_favorites(username):
     query ($name : String) {
           User(name: $name) {
             favourites{
-                anime(page:1, perPage: 20) {
+                anime(page:1, perPage: 10) {
                     nodes{
                         title {
                             romaji

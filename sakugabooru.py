@@ -29,7 +29,7 @@ def get_most_popular(r_json):
 def sakuget_popular_mp4_link(num_posts : int, search_tag : string):
     clip = get_most_popular(sakuget(num_posts, search_tag))
     if clip:
-        return clip['file_url']
+        return (search_tag, clip['file_url'])
     return None
 
     

@@ -18,7 +18,7 @@ def generate_eva_card(width, height, lines):
         print(n)
         draw.text((x, y), lines[n], fill="white", font=fonts[n])
         y += font_sizes[n]
-    image.save("./eva.png")
+    image.save("./title.png")
 
 def generate_bebop_card(width, height, text):
     image, draw = generate_blank_title_card(width, height)
@@ -26,7 +26,7 @@ def generate_bebop_card(width, height, text):
     font = ImageFont.truetype(font=BEBOP_FONT, size=font_size)
     bounding = font.getbbox(text)
     draw.text((width - bounding[2] - bounding[3], height - 3.5 * bounding[3]), text, fill='white', font=font)
-    image.save("bebop.png")
+    image.save("./title.png")
 
 def generate_bebop_card_temp(width, height, username):
     generate_bebop_card(width, height, "%s HAS A GOOD EYE..." % username.upper())
@@ -34,5 +34,6 @@ def generate_bebop_card_temp(width, height, username):
 def generate_eva_card_temp(width, height, username):
     lines = ["YOUR", "ANILIST", "FAVORITES", "USER:", username.upper()]
     generate_eva_card(width, height, lines)
-#generate_bebop_card_temp(*DEFAULT_DIMENSIONS, "miishin")
-generate_eva_card_temp(*DEFAULT_DIMENSIONS, "miishin")
+
+generate_bebop_card_temp(*DEFAULT_DIMENSIONS, "miishin")
+#generate_eva_card_temp(*DEFAULT_DIMENSIONS, "miishin")

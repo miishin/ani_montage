@@ -22,10 +22,16 @@ def sanitize_clips():
             .run()
         )
 
+# delete files in /clean_clips
+def clear_clean_clips():
+    for file in os.scandir(CLEAN_CLIP_DIRECTORY):
+        os.remove(file.path)
+
 # combines the clips into one montage
 def combine_clips():
     sanitize_clips()
-    v_files = [item for sublist in map(lambda f: [f.video], open_files()) for item in sublist]
+    v_files = [f.video for f in open_files()]
+    #v_files = [item for sublist in map(lambda f: [f.video, f.audio], open_files()) for item in sublist]
     print(v_files)
     try:
         if os.path.isfile(TITLE_CARD_FILE):
@@ -33,12 +39,12 @@ def combine_clips():
             v_files.insert(0, ffmpeg.input(TITLE_CARD_VIDEO))
     except ffmpeg.Error as e:
         print(e.stderr)
-    print(":3")
-    print(v_files)
-    joined_video = ffmpeg.concat(*v_files, v=1, unsafe=True).node
     try:
+        joined_video = ffmpeg.concat(*v_files, v=1, unsafe=True)
         out, err = ffmpeg.output(joined_video[1], './output.mp4').run(capture_stderr=True)
     except ffmpeg.Error as e:
         print(e.stderr)
 
+os.remove('./title.mp4')
+clear_clean_clips()
 combine_clips()

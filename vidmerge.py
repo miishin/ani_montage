@@ -32,7 +32,6 @@ def clear_clean_clips():
 def combine_clips():
     sanitize_clips()
     v_files = [f.video for f in open_files()]
-    print(v_files)
     try:
         if os.path.isfile(TITLE_CARD_FILE):
             if os.path.isfile(TITLE_CARD_VIDEO):

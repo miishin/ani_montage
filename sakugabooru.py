@@ -1,38 +1,37 @@
-import string
-import requests
-import os
+import string, requests, os, ffmpeg
 from random import choice
-from json import load, dumps
+from json import dumps
 
-# returns JSON response from querying the given tag
+# returns JSON response from querying the given tag with a given post # limit
 def sakuget(num_posts, tag):
     p = {'limit': num_posts, 'tags': tag}
     r = requests.get('https://www.sakugabooru.com/post.json', params=p)
     return r.json()
 
-# sorts the json response
-def sort_posts(posts, key, desc):
-    return sorted(posts, key=lambda p: p[key], reverse=desc)
-
-# grabs the links to the mp4
+# Returns the mp4 links in the JSON response
 def get_mp4_links(r_json):
-    links = []
-    for json_obj in r_json:
-        links.append(json_obj['file_url'])
-    return links
+    return [json_object['file_url'] for json_object in r_json]
 
+# Gets the most liked post out of the response
 def get_most_popular(r_json):
     if not r_json:
         return None
-    return max(filter_long_clips(r_json), key=lambda j: j['score']) 
+    return max(r_json, key=lambda j: j['score']) 
 
-def filter_long_clips(r_json):
+# Filters the response for given file size (in bytes)
+def filter_large_clips(r_json, max_file_size):
     if not r_json:
         return None
-    return filter(lambda j: j['file_size'] < 10000000, r_json)
+    return filter(lambda j: j['file_size'] < max_file_size, r_json)
 
-def sakuget_popular_mp4_link(num_posts : int, search_tag : string):
-    clip = get_most_popular(sakuget(num_posts, search_tag))
-    if clip:
-        return (search_tag, clip['file_url'])
-    return None
+# Test function to write json file locally
+def sakuget_to_file(num_posts, tag):
+    j = sakuget(num_posts, tag)
+    with open("example.json", "w") as file:
+        file.write(dumps(j))
+
+# Query tag with post limit and file size limit so we don't get 1 minute long clips
+def main(tag, num_posts, max_file_size):
+    s = sakuget(num_posts, tag)
+    s = filter_large_clips(s, max_file_size)
+    return (tag, get_most_popular(s))

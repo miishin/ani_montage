@@ -2,6 +2,9 @@ import clip, vidmerge
 import title_card_generator as tcg
 from sys import argv
 
+# Usage:
+# app.py [username] [title_card_type]
+# title card type: 0 - bebop, 1 - eva
 def main():
     print("Grabbing video links")
     mp4links = clip.get_popular_clips(argv[1])

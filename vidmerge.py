@@ -31,20 +31,14 @@ def clear_clean_clips():
 def combine_clips():
     sanitize_clips()
     v_files = [f.video for f in open_files()]
-    #v_files = [item for sublist in map(lambda f: [f.video, f.audio], open_files()) for item in sublist]
     print(v_files)
     try:
         if os.path.isfile(TITLE_CARD_FILE):
             ffmpeg.input(TITLE_CARD_FILE, t=3, framerate=24, loop=1).output(TITLE_CARD_VIDEO).run()
-            v_files.insert(0, ffmpeg.input(TITLE_CARD_VIDEO))
+            v_files.insert(0, ffmpeg.input(TITLE_CARD_VIDEO).video)
     except ffmpeg.Error as e:
         print(e.stderr)
     try:
-        joined_video = ffmpeg.concat(*v_files, v=1, unsafe=True)
-        out, err = ffmpeg.output(joined_video[1], './output.mp4').run(capture_stderr=True)
+        joined_video, err = ffmpeg.concat(*v_files, n=len(v_files), v=1, a=0, unsafe=True).output('./output.mp4').run()
     except ffmpeg.Error as e:
         print(e.stderr)
-
-os.remove('./title.mp4')
-clear_clean_clips()
-combine_clips()

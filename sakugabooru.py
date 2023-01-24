@@ -33,5 +33,8 @@ def sakuget_to_file(num_posts, tag):
 # Query tag with post limit and file size limit so we don't get 1 minute long clips
 def main(tag, num_posts, max_file_size):
     s = sakuget(num_posts, tag)
+    if not s:
+        return None
     s = filter_large_clips(s, max_file_size)
-    return (tag, get_most_popular(s))
+    post = get_most_popular(s)
+    return (tag, post['file_url'])

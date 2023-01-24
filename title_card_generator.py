@@ -1,8 +1,10 @@
 from PIL import Image, ImageDraw, ImageFont
+from os import remove, path
 
 DEFAULT_DIMENSIONS = (854, 480)
 EVA_FONT = "./EVA-Matisse_Classic.ttf"
 BEBOP_FONT = "./Cheltenham Condensed Bold Italic.ttf"
+OUTPUT_IMAGE = "./title.png"
 
 def generate_blank_title_card(width, height):
     img = Image.new("RGB", (width, height), 0)
@@ -18,7 +20,7 @@ def generate_eva_card(width, height, lines):
         print(n)
         draw.text((x, y), lines[n], fill="white", font=fonts[n])
         y += font_sizes[n]
-    image.save("./title.png")
+    image.save(OUTPUT_IMAGE)
 
 def generate_bebop_card(width, height, text):
     image, draw = generate_blank_title_card(width, height)
@@ -26,14 +28,17 @@ def generate_bebop_card(width, height, text):
     font = ImageFont.truetype(font=BEBOP_FONT, size=font_size)
     bounding = font.getbbox(text)
     draw.text((width - bounding[2] - bounding[3], height - 3.5 * bounding[3]), text, fill='white', font=font)
-    image.save("./title.png")
+    image.save(OUTPUT_IMAGE)
 
-def generate_bebop_card_temp(width, height, username):
+def generate_my_bebop_card(width, height, username):
     generate_bebop_card(width, height, "%s HAS A GOOD EYE..." % username.upper())
 
-def generate_eva_card_temp(width, height, username):
-    lines = ["YOUR", "ANILIST", "FAVORITES", "USER:", username.upper()]
-    generate_eva_card(width, height, lines)
+def generate_my_eva_card(width, height, username):
+    generate_eva_card(width, height, ["YOUR", "ANILIST", "FAVORITES", "USER:", username.upper()])
 
-generate_bebop_card_temp(*DEFAULT_DIMENSIONS, "miishin")
-#generate_eva_card_temp(*DEFAULT_DIMENSIONS, "miishin")
+def main(username, tc):
+    if path.isfile(OUTPUT_IMAGE):
+        remove(OUTPUT_IMAGE)
+    mapping = {"bebop": generate_my_bebop_card, "eva": generate_my_eva_card}
+    if tc in mapping:
+        mapping[tc](*DEFAULT_DIMENSIONS, username)

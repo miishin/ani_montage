@@ -4,7 +4,7 @@ from sys import argv
 from os import scandir, remove
 
 CLIP_DIRECTORY = './clips/'
-MAX_FILE_SIZE = 7000000
+MAX_FILE_SIZE = 8000000
 # Given an Anilist username, returns a list of links to 
 # Sakugabooru mp4 files corresponding to that user's favorite Anime
 def get_popular_clips(usr):

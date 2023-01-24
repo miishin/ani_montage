@@ -6,6 +6,9 @@ from sys import argv
 # app.py [username] [title_card_type]
 # title card type: 0 - bebop, 1 - eva
 def main():
+    clip.clear_clips()
+    vidmerge.clear_clean_clips()
+
     print("Grabbing video links")
     mp4links = clip.get_popular_clips(argv[1])
     print("Downloading videos!")

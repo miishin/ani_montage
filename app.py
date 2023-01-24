@@ -4,17 +4,20 @@ from sys import argv
 
 # Usage:
 # app.py [username] [title_card_type]
-# title card type: 0 - bebop, 1 - eva
+# title card type: "eva" or "bebop" for now
 def main():
     clip.clear_clips()
     vidmerge.clear_clean_clips()
+    
+    username = argv[1]
+    title_card = argv[2]
 
     print("Grabbing video links")
-    mp4links = clip.get_popular_clips(argv[1])
+    mp4links = clip.get_popular_clips(username)
     print("Downloading videos!")
     clip.download_clips(mp4links)
     print("Generating title card")
-    tcg.main(argv[1], argv[2])
+    tcg.main(username, title_card)
     print("Generating reel")
     vidmerge.combine_clips()
     print("Done!")

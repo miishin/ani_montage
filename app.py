@@ -1,16 +1,24 @@
 import clip, vidmerge
 import title_card_generator as tcg
-from sys import argv
+import argparse
 
 # Usage:
-# app.py [username] [title_card_type]
-# title card type: "eva" or "bebop" for now
+# app.py [--user USERNAME, --style STYLE]
+# STYLE: ["EVA", "BEBOP"]
 def main():
+
+    parser = argparse.ArgumentParser(description="AniList to montage. Enter an AniList username and a style: one of [EVA, BEBOP]")
+    parser.add_argument("--user", help="AniList username")
+    parser.add_argument("--style", help="Titlecard style")
+    args = parser.parse_args()
+
     clip.clear_clips()
     vidmerge.clear_clean_clips()
     
-    username = argv[1]
-    title_card = argv[2]
+    username = args.user
+    title_card = args.style
+    if title_card is None:
+        title_card = "bebop"
 
     print("Grabbing video links")
     mp4links = clip.get_popular_clips(username)

@@ -42,3 +42,5 @@ def main(username, tc):
     mapping = {"bebop": generate_my_bebop_card, "eva": generate_my_eva_card}
     if tc in mapping:
         mapping[tc](*DEFAULT_DIMENSIONS, username)
+    else:
+        generate_my_bebop_card(*DEFAULT_DIMENSIONS, username)
